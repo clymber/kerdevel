@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**/.*.cmd": true,
+        "**/.*.mod": true,
+        "**/*.mod": true,
+        "**/*.mod.[co]": true,
+        "**/*.o": true,
+        "**/*.o.d": true
+    }
+}
