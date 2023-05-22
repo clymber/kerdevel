@@ -11,5 +11,5 @@
 ## Kernel Module Management
 - [Module Parameters](module_param/module_parameters.ipynb)
 - [Export Kernel Symbols](export_symbol/export_kernel_symbols.ipynb)
-- [Show Module Information - `modinfo`](module_param/get_module_info.ipynb)
-- [Module Dependency Resolution - `modprobe`](export_symbol/dependency_resolution_modprobe.ipynb)
+- [Show Module Information - `modinfo`, `lsmod` and */proc/modules*](module_param/get_module_info.ipynb)
+- [Module Dependency Resolution - `modprobe` and `depmop`](export_symbol/dependency_resolution_modprobe.ipynb)
