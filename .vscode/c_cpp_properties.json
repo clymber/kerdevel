@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/clymber/Studio/@linux-6.1.28/include/**"
+                "/home/clymber/@linux/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
