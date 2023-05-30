@@ -14,3 +14,7 @@
 - [Show Module Information - `modinfo`, `lsmod` and */proc/modules*](module_param/get_module_info.ipynb)
 - [Module Installation - `make modules_install`, `insmod/rmmod` and `modprobe`](export_symbol/module_installation.ipynb)
 - [Module Dependency Resolution - `modprobe` and `depmop`](export_symbol/dependency_resolution_modprobe.ipynb)
+
+## Linux Kernel Debugging
+- [Ftrace - Introduce](ftrace/ftrace.ipynb)
+- [Ftrace - How to Access and Control It](ftrace/interact_with_ftrace.ipynb)
