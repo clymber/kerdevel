@@ -14,6 +14,7 @@
 - [Show Module Information - `modinfo`, `lsmod` and */proc/modules*](module_param/get_module_info.ipynb)
 - [Module Installation - `make modules_install`, `insmod/rmmod` and `modprobe`](export_symbol/module_installation.ipynb)
 - [Module Dependency Resolution - `modprobe` and `depmop`](export_symbol/dependency_resolution_modprobe.ipynb)
+- [Get PID from a Kernel Module](module_getpid/get_pid_from_kernel.ipynb)
 
 ## Linux Kernel Debugging
 - [Ftrace - Introduce](ftrace/ftrace.ipynb)
