@@ -4,15 +4,17 @@
 #include <sys/types.h>
 #define MAX_TRACER_STR 32
 
-char ftrace_set_tracing(const char value);
+int ftrace_tracelog(const char* fmt, ...);
 
-int ftrace_set_tracer(const char* new, char* old);
+int ftrace_tracelog_set(int enable);
 
-int ftrace_pid_add(const pid_t* newpid);
+int ftrace_tracelog_clear(const char* trace);
 
-int ftrace_pid_reset(void);
+int ftrace_tracer_set(const char* new, char* old);
 
-int ftrace_marker(const char* fmt, ...);
+int ftrace_pid_filter_add(const pid_t* newpid);
+
+int ftrace_pid_filter_clear(void);
 
 void ftrace_close(void);
 #endif /* _FTRACE_UTILS_H_ */

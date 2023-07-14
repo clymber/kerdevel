@@ -16,5 +16,9 @@
 */
 #define errormsg(fmt, ...) fprintf(stderr, "[ERROR] "fmt"\n", ##__VA_ARGS__)
 
+/*
+ * @desc: return true if the @str is not NULL and not empty
+*/
+#define not_empty(str) ((str != NULL) && (str[0] != '\0'))
 
 #endif /* _HELLO_H_*/

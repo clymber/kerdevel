@@ -20,22 +20,22 @@ int main(int argc, char* argv[])
     char* progpath = strdup(argv[0]);
     char* progname = basename(progpath);
 
-    if (ftrace_set_tracer("function", old_tracer) < 0) {
+    if (ftrace_tracer_set("function", old_tracer) < 0) {
         errormsg("set function_graph tracer failed");
         goto exiting;
     }
 
-    if (ftrace_pid_add(&pid) < 0) {
+    if (ftrace_pid_filter_add(&pid) < 0) {
         errormsg("ftrace add pid of %s failed", progname);
         goto exiting;
     }
 
-    if ((old_tracing = ftrace_set_tracing('1')) < 0) {
+    if ((old_tracing = ftrace_tracelog_set('1')) < 0) {
         errormsg("open ftrace recording failed");
         goto exiting;
     }
 
-    if (ftrace_marker("[%s] Hello! My PID: %ld\n", progname, getpid()) < 0) {
+    if (ftrace_tracelog("[%s] Hello! My PID: %ld\n", progname, getpid()) < 0) {
         errormsg("greeting error");
         goto exiting;
     }
@@ -52,16 +52,16 @@ int main(int argc, char* argv[])
     ret = 0;
 exiting:
     if (old_tracing > 0) {
-        if (ftrace_set_tracing(old_tracing) < 0) {
+        if (ftrace_tracelog_set(old_tracing) < 0) {
             errormsg("restoring ftrace recording failed");
         }
     }
     if (strlen(old_tracer) > 0) {
-        if (ftrace_set_tracer(old_tracer, NULL) < 0) {
+        if (ftrace_tracer_set(old_tracer, NULL) < 0) {
             errormsg("restoring ftracer tracer failed");
         }
     }
-    if (ftrace_pid_reset() < 0) {
+    if (ftrace_pid_filter_clear() < 0) {
         errormsg("clear set_ftrace_pid failed");
     }
     if (progpath) {

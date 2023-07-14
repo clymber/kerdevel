@@ -2,6 +2,8 @@
 #include "mounts_utils.h"
 #include <stdarg.h>
 #include <assert.h>
+#include <unistd.h>
+#include <stdbool.h>
 
 static FILE* tracing_on_fp = NULL;
 static FILE* trace_marker_fp = NULL;
@@ -23,15 +25,10 @@ static char* ftrace_abs_path(const char* file, char* path)
     return path;
 }
 
-char ftrace_set_tracing(const char value)
+int ftrace_tracelog_set(int enable)
 {
-    char oldvalue = '\0';
+    int oldvalue = '\0';
     char path[MAX_PATH] = {'\0'};
-
-    if (value != '0' && value != '1') {
-        errormsg("invalid value: %c", value);
-        return -1;
-    }
 
     if (!tracing_on_fp) {
         if (ftrace_abs_path("tracing/tracing_on", path) == NULL) {
@@ -45,23 +42,25 @@ char ftrace_set_tracing(const char value)
     }
 
     rewind(tracing_on_fp);
-    if (fread(&oldvalue, sizeof(oldvalue), 1, tracing_on_fp) < 1) {
+    if (fscanf(tracing_on_fp, "%d", &oldvalue) < 1) {
         perrorf("%s, get original value failed", path);
         return -1;
     }
 
-    if (value != oldvalue) {
-        rewind(tracing_on_fp);
-        if (fwrite(&value, sizeof(value), 1, tracing_on_fp) < 1) {
-            perrorf("%s, set new value failed", path);
-            return -1;
-        }
+    if ((bool)enable == (bool)oldvalue) {
+        return oldvalue;
+    }
+
+    rewind(tracing_on_fp);
+    if (fprintf(tracing_on_fp, "%c", (bool)enable? '1': '0') < 1) {
+        perrorf("%s, set new value failed", path);
+        return -1;
     }
 
     return oldvalue;
 }
 
-int ftrace_set_tracer(const char* new, char* old)
+int ftrace_tracer_set(const char* new, char* old)
 {
     int ret = -1;
     char path[MAX_PATH] = {'\0'};
@@ -103,7 +102,7 @@ returning:
     return ret;
 }
 
-int ftrace_marker(const char* fmt, ...)
+int ftrace_tracelog(const char* fmt, ...)
 {
     int ret = -1;
     va_list valist;
@@ -135,7 +134,7 @@ int ftrace_marker(const char* fmt, ...)
     return ret;
 }
 
-int ftrace_pid_add(const pid_t* newpid)
+int ftrace_pid_filter_add(const pid_t* newpid)
 {
     char path[MAX_PATH+1] = {'\0'};
     FILE* fp = NULL;
@@ -169,12 +168,13 @@ returning:
     return ret;
 }
 
-int ftrace_pid_reset(void)
+static int ftrace_clear_file(const char* whichfile)
 {
     char path[MAX_PATH+1] = {'\0'};
     FILE* fp = NULL;
+    assert(not_empty(whichfile));
 
-    if (ftrace_abs_path("tracing/set_ftrace_pid", path) == NULL) {
+    if (ftrace_abs_path(whichfile, path) == NULL) {
         return -1;
     }
 
@@ -185,6 +185,17 @@ int ftrace_pid_reset(void)
 
     fclose(fp);
     return 0;
+}
+
+int ftrace_pid_filter_clear(void)
+{
+    return ftrace_clear_file("tracing/set_ftrace_pid");
+}
+
+int ftrace_tracelog_clear(const char* trace)
+{
+    const char* whichtrace = not_empty(trace)? trace: "tracing/trace";
+    return ftrace_clear_file(whichtrace);
 }
 
 void ftrace_close(void)

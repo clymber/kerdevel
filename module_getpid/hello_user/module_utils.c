@@ -41,7 +41,7 @@ static int ftrace_pid_execve(const char* cmd, char* const args[], char* const en
     }
 
     pid = getpid();
-    if (ftrace_pid_add(&pid) < 0) {
+    if (ftrace_pid_filter_add(&pid) < 0) {
         errormsg("ftrace add pid %ld failed", (long)pid);
         return -1;
     }
